@@ -8,5 +8,8 @@ cc_library_shared {
         "liblog",
         "libdl"
     ],
+    include_dirs: [
+        "hardware/rockchip/rknpu2/runtime/RK3588/Android/librknn_api/include/",
+    ],
     stl: "c++_static",
 }

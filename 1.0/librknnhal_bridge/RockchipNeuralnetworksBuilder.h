@@ -15,7 +15,7 @@
 #include <sys/time.h>
 #include <sys/cdefs.h>
 
-#include "../default/prebuilts/librknnrt/include/rknn_api.h"
+#include "../nnapi_implementation/rknn_api.h"
 #include "HalInterfaces.h"
 
 __BEGIN_DECLS

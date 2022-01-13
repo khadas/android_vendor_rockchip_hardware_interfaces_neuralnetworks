@@ -31,21 +31,3 @@ cc_library_shared {
     ],
     cflags: ["-DIMPL_RKNN"],
 }
-
-cc_prebuilt_library_shared {
-    name: "librknnrt",
-    compile_multilib: "both",
-    multilib: {
-        lib64: {
-            srcs: ["prebuilts/librknnrt/lib64/librknnrt.so"],
-        },
-        lib32: {
-            srcs: ["prebuilts/librknnrt/lib/librknnrt.so"],
-        },
-    },
-    strip: {
-        none: true,
-    },
-    check_elf_files: false,
-    vendor: true,
-}

@@ -12,6 +12,9 @@ cc_library_shared {
         "libhidlmemory",
         "liblog",
     ],
+    include_dirs: [
+        "hardware/rockchip/rknpu2/runtime/RK3588/Android/librknn_api/include/",
+    ],
     cppflags: [
         "-Wno-error",
     ],

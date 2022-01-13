@@ -10,7 +10,7 @@
 #endif
 
 #if IMPL_RKNN
-#include "prebuilts/librknnrt/include/rknn_api.h"
+#include "rknn_api.h"
 #endif
 
 #include <android/hidl/memory/1.0/IMemory.h>

@@ -6,7 +6,7 @@
 #include <hidlmemory/mapping.h>
 
 #include <errno.h>
-#include "../default/prebuilts/librknnrt/include/rknn_api.h"
+#include "../nnapi_implementation/rknn_api.h"
 
 #include <stdint.h>
 #include <stdlib.h>
