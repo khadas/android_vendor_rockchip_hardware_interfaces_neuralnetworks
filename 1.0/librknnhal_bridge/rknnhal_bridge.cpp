@@ -125,3 +125,9 @@ int ARKNN_set_io_mem(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem, 
     int ret = client->rknn_set_io_mem(context, mem, attr);
     return ret;
 }
+
+int ARKNN_set_core_mask(ARKNNHAL *hal, rknn_context context, rknn_core_mask coremask) {
+    CHECK_AND_GET_CLIENT();
+    int ret = client->rknn_set_core_mask(context, coremask);
+    return ret;
+}

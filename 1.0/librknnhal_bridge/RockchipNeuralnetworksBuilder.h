@@ -61,7 +61,8 @@ class RockchipNeuralnetworksBuilder {
     int rknn_destory_mem(rknn_context ctx, rknn_tensor_mem *mem);
     rknn_tensor_mem* rknn_create_mem(rknn_context ctx, uint32_t size);
     int rknn_set_io_mem(rknn_context ctx, rknn_tensor_mem *mem, rknn_tensor_attr *attr);
-    
+    int rknn_set_core_mask(rknn_context ctx, rknn_core_mask coremask);
+
   private:
     int _get_model_info(rknn_context context);
     sp<hal::V1_0::IRKNeuralnetworks> _kRKNNInterface;

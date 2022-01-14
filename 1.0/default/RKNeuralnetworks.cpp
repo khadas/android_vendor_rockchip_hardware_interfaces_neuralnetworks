@@ -57,6 +57,10 @@ static rknn_query_cmd to_rknnapi(V1_0::RKNNQueryCmd cmd) {
             return RKNN_QUERY_MEM_SIZE;
         case V1_0::RKNNQueryCmd::RKNN_QUERY_CUSTOM_STRING:
             return RKNN_QUERY_CUSTOM_STRING;
+        case V1_0::RKNNQueryCmd::RKNN_QUERY_NATIVE_INPUT_ATTR:
+            return RKNN_QUERY_NATIVE_INPUT_ATTR;
+        case V1_0::RKNNQueryCmd::RKNN_QUERY_NATIVE_OUTPUT_ATTR:
+            return RKNN_QUERY_NATIVE_OUTPUT_ATTR;
         default:
             return RKNN_QUERY_CMD_MAX;
     }
@@ -74,6 +78,14 @@ static rknn_tensor_type to_rknnapi(V1_0::RKNNTensorType type) {
             return RKNN_TENSOR_UINT8;
         case V1_0::RKNNTensorType::RKNN_TENSOR_INT16:
             return RKNN_TENSOR_INT16;
+        case V1_0::RKNNTensorType::RKNN_TENSOR_INT32:
+            return RKNN_TENSOR_INT32;
+        case V1_0::RKNNTensorType::RKNN_TENSOR_UINT32:
+            return RKNN_TENSOR_UINT32;
+        case V1_0::RKNNTensorType::RKNN_TENSOR_INT64:
+            return RKNN_TENSOR_INT64;
+        case V1_0::RKNNTensorType::RKNN_TENSOR_BOOL:
+            return RKNN_TENSOR_BOOL;
         default:
             return RKNN_TENSOR_TYPE_MAX;
     }
@@ -85,8 +97,29 @@ static rknn_tensor_format to_rknnapi(V1_0::RKNNTensorFormat format) {
             return RKNN_TENSOR_NCHW;
         case V1_0::RKNNTensorFormat::RKNN_TENSOR_NHWC:
             return RKNN_TENSOR_NHWC;
+        case V1_0::RKNNTensorFormat::RKNN_TENSOR_NC1HWC2:
+            return RKNN_TENSOR_NC1HWC2;
         default:
-            return RKNN_TENSOR_FORMAT_MAX;
+            return RKNN_TENSOR_UNDEFINED;
+    }
+}
+
+static rknn_core_mask to_rknnapi(V1_0::RKNNCoreMask coremask) {
+    switch (coremask) {
+        case V1_0::RKNNCoreMask::RKNN_NPU_CORE_AUTO:
+            return RKNN_NPU_CORE_AUTO;
+        case V1_0::RKNNCoreMask::RKNN_NPU_CORE_0:
+            return RKNN_NPU_CORE_0;
+        case V1_0::RKNNCoreMask::RKNN_NPU_CORE_1:
+            return RKNN_NPU_CORE_1;
+        case V1_0::RKNNCoreMask::RKNN_NPU_CORE_2:
+            return RKNN_NPU_CORE_2;
+        case V1_0::RKNNCoreMask::RKNN_NPU_CORE_0_1:
+            return RKNN_NPU_CORE_0_1;
+        case V1_0::RKNNCoreMask::RKNN_NPU_CORE_0_1_2:
+            return RKNN_NPU_CORE_0_1_2;
+        default:
+            return RKNN_NPU_CORE_AUTO;
     }
 }
 
@@ -443,6 +476,14 @@ Return<void> RKNeuralnetworks::rknnCreateMem(uint64_t context, uint32_t size, rk
 #endif
     _hidl_cb(toErrorStatus(ret), respose_mem);
     return Void();
+}
+
+Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> RKNeuralnetworks::rknnSetCoreMask(uint64_t context, ::rockchip::hardware::neuralnetworks::V1_0::RKNNCoreMask coremask) {
+    RECORD_TAG();
+#if IMPL_RKNN
+    ret = rknn_set_core_mask(context, to_rknnapi(coremask));
+#endif
+    return ::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus {toErrorStatus(ret)};
 }
 
 Return<void> RKNeuralnetworks::registerCallback(const sp<::rockchip::hardware::neuralnetworks::V1_0::ILoadModelCallback>& loadCallback, const sp<::rockchip::hardware::neuralnetworks::V1_0::IGetResultCallback>& getCallback) {

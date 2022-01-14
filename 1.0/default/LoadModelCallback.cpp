@@ -18,11 +18,10 @@
 namespace rockchip::hardware::neuralnetworks::implementation {
 
 // Methods from ::rockchip::hardware::neuralnetworks::V1_0::ILoadModelCallback follow.
-Return<void> LoadModelCallback::notify(::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus status, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNDeviceID& pdevs) {
+Return<void> LoadModelCallback::notify(::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus status) {
     RECORD_TAG();
     UNUSED(ret);
     UNUSED(status);
-    UNUSED(pdevs);
     return Void();
 }
 

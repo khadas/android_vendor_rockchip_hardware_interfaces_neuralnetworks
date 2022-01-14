@@ -1,5 +1,7 @@
 package rockchip.hardware.neuralnetworks@1.0;
 
+typedef uint64_t RKNNContext;
+
 /*
 * Error code returned by the RKNN API.
 * --> rknn_api.h: Error code
@@ -17,6 +19,8 @@ enum ErrorStatus : int32_t {
     RKNN_ERR_OUTPUT_INVALID,
     RKNN_ERR_DEVICE_UNMATCH,
     RKNN_ERR_INCOMPATILE_PRE_COMPILE_MODEL,
+    RKNN_ERR_INCOMPATILE_OPTIMIZATION_LEVEL_VERSION,
+    RKNN_ERR_TARGET_PLATFORM_UNMATCH,
 };
 
 /*
@@ -36,6 +40,8 @@ enum RKNNQueryCmd : int32_t {
 
     RKNN_QUERY_MEM_SIZE,                                /* query the weight & internal memory size */
     RKNN_QUERY_CUSTOM_STRING,                           /* query the custom string */
+    RKNN_QUERY_NATIVE_INPUT_ATTR,                       /* query the attribute of native input tensor. */
+    RKNN_QUERY_NATIVE_OUTPUT_ATTR,                      /* query the attribute of native output tensor. */
 
     RKNN_QUERY_CMD_MAX,
 };
@@ -46,8 +52,11 @@ enum RKNNTensorType : int32_t {
     RKNN_TENSOR_INT8,                                   /* data type is int8. */
     RKNN_TENSOR_UINT8,                                  /* data type is uint8. */
     RKNN_TENSOR_INT16,                                  /* data type is int16. */
-
-    RKNNTensorType_MAX,
+    RKNN_TENSOR_INT32,                                  /* data type is int32. */
+    RKNN_TENSOR_UINT32,                                 /* data type is uint32. */
+    RKNN_TENSOR_INT64,                                  /* data type is int64. */
+    RKNN_TENSOR_BOOL,
+    RKNN_TENSOR_TYPE_MAX
 };
 
 enum RKNNTensorQntType : int32_t {
@@ -64,7 +73,20 @@ enum RKNNTensorQntType : int32_t {
 enum RKNNTensorFormat : int32_t {
     RKNN_TENSOR_NCHW = 0,                               /* data format is NCHW. */
     RKNN_TENSOR_NHWC,                                   /* data format is NHWC. */
-    RKNNTensorFormat_MAX,
+    RKNN_TENSOR_NC1HWC2,                                /* data format is NC1HWC2. */
+    RKNN_TENSOR_UNDEFINED,
+};
+
+/*
+* the mode of running on target NPU core.
+*/
+enum RKNNCoreMask : int32_t {
+    RKNN_NPU_CORE_AUTO = 0,                               /* default, run on NPU core randomly. */
+    RKNN_NPU_CORE_0 = 1,                                  /* run on NPU core 0. */
+    RKNN_NPU_CORE_1 = 2,                                  /* run on NPU core 1. */
+    RKNN_NPU_CORE_2 = 4,                                  /* run on NPU core 2. */
+    RKNN_NPU_CORE_0_1 = 3,                                /* run on NPU core 1 and core 2. */
+    RKNN_NPU_CORE_0_1_2 = 7,                              /* run on NPU core 1 and core 2 and core 3. */
 };
 
 /*
@@ -129,12 +151,18 @@ struct RKNNSDKVersion {
 };
 
 /*
- * the information for rknn_find_devices.
- */
-struct RKNNDeviceID {
-    uint32_t n_devices;                                 /* the number of devices. */
-    string[256] types;                                  /* the array of device type. */
-    string[256] ids;                                    /* the array of device ID. */
+    the information for RKNN_QUERY_MEM_SIZE.
+*/
+struct RKNNMemSize {
+    uint32_t total_weight_size;                         /* the weight memory size */
+    uint32_t total_internal_size;                       /* the internal memory size, exclude inputs/outputs */
+};
+
+/*
+    the information for RKNN_QUERY_CUSTOM_STRING.
+*/
+struct RKNNCustomString {
+    string str;                                         /* the string of custom, lengths max to 1024 bytes */
 };
 
 /*
@@ -173,8 +201,7 @@ struct RKNNOutput {
  * the extend information for rknn_init.
  */
 struct RKNNInitExtend {
-    string device_id;                                   /* input parameter, indicate which device selected. if only one
-                                                           device connected, can set nullptr. */
+    RKNNContext ctx;                                    /* rknn context */
 };
 
 /*
@@ -182,6 +209,9 @@ struct RKNNInitExtend {
  */
 struct RKNNRunExtend {
     uint64_t frame_id;                                  /* output parameter, indicate current frame id of run. */
+    int32_t non_block;                                  /* block flag of run, 0 is block else 1 is non block */
+    int32_t timeout_ms;                                 /* timeout for block mode, in milliseconds */
+    int32_t fence_fd;                                   /* fence fd from other unit */
 };
 
 /*
@@ -191,8 +221,6 @@ struct RKNNOutputExtend {
     uint64_t frame_id;                                  /* output parameter, indicate the frame id of outputs, corresponds to
                                                            struct rknn_run_extend.frame_id.*/
 };
-
-typedef uint64_t RKNNContext;
 
 enum RKNN_HWBufferType : uint32_t {
     HW_BUFFER_DRM,

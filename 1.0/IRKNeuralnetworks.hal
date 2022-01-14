@@ -27,6 +27,8 @@ interface IRKNeuralnetworks {
     rknnSetIOMem(RKNNContext context, RKNNTensorMemory mem, RKNNTensorAttr attr) generates (ErrorStatus status);
     @callflow(next={"*"})
     rknnCreateMem(RKNNContext context, uint32_t size) generates (ErrorStatus status, RKNNTensorMemory mem);
+    @callflow(next={"*"})
+    rknnSetCoreMask(RKNNContext context, RKNNCoreMask coremask) generates (ErrorStatus status);
 
     // set callback for clients.
     registerCallback(ILoadModelCallback loadCallback, IGetResultCallback getCallback);

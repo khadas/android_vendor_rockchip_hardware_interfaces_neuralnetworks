@@ -48,7 +48,7 @@ struct NnApi {
   int (*ARKNN_destory_mem)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem);
   rknn_tensor_mem * (*ARKNN_create_mem)(ARKNNHAL *hal, rknn_context context, uint32_t size);
   int (*ARKNN_set_io_mem)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem, rknn_tensor_attr *attr);
-
+  int (*ARKNN_set_core_mask)(ARKNNHAL *hal, rknn_context context, rknn_core_mask coremask);
   int (*ASharedMemory_create)(const char* name, size_t size);
 };
 
@@ -141,6 +141,7 @@ static const NnApi LoadNnApi() {
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_destory_mem);
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_create_mem);
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_set_io_mem);
+  LOAD_FUNCTION(librknnhal_bridge, ARKNN_set_core_mask);
 
   /* Not sure this func exist.
    * LOAD_FUNCTION_OPTIONAL(
@@ -371,6 +372,19 @@ int rknn_set_io_mem(rknn_context context, rknn_tensor_mem *mem, rknn_tensor_attr
   const NnApi *_nnapi = NnApiImplementation();
 
   int ret = _nnapi->ARKNN_set_io_mem(_ctx->hal, _ctx->rknn_ctx, mem, attr);
+
+  return ret;
+}
+
+int rknn_set_core_mask(rknn_context context, rknn_core_mask core_mask) {
+  _rknn_context *_ctx = (_rknn_context *)context;
+  if (_ctx == NULL || _ctx->hal == NULL || _ctx->rknn_ctx == 0) {
+    return RKNN_ERR_CTX_INVALID;
+  }
+
+  const NnApi *_nnapi = NnApiImplementation();
+
+  int ret = _nnapi->ARKNN_set_core_mask(_ctx->hal, _ctx->rknn_ctx, core_mask);
 
   return ret;
 }

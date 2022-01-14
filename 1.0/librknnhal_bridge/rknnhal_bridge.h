@@ -46,5 +46,6 @@ int ARKNN_outputs_release(ARKNNHAL *hal, rknn_context context, uint32_t n_ouputs
 int ARKNN_destory_mem(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem);
 rknn_tensor_mem * ARKNN_create_mem(ARKNNHAL *hal, rknn_context context, uint32_t size);
 int ARKNN_set_io_mem(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem, rknn_tensor_attr *attr);
+int ARKNN_set_core_mask(ARKNNHAL *hal, rknn_context context, rknn_core_mask coremask);
 
 __END_DECLS

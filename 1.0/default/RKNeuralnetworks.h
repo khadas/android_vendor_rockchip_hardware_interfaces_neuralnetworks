@@ -43,6 +43,7 @@ struct RKNeuralnetworks : public V1_0::IRKNeuralnetworks {
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnDestoryMemory(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorMemory& mem) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnSetIOMem(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorMemory& mem, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorAttr& attr) override;
     Return<void> rknnCreateMem(uint64_t context, uint32_t size, rknnCreateMem_cb _hidl_cb) override;
+    Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnSetCoreMask(uint64_t context, ::rockchip::hardware::neuralnetworks::V1_0::RKNNCoreMask coremask) override;
     Return<void> registerCallback(const sp<::rockchip::hardware::neuralnetworks::V1_0::ILoadModelCallback>& loadCallback, const sp<::rockchip::hardware::neuralnetworks::V1_0::IGetResultCallback>& getCallback) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.

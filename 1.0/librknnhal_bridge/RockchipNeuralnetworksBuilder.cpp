@@ -87,8 +87,16 @@ static RKNNTensorType to_rknn_hal(rknn_tensor_type type) {
         return RKNNTensorType::RKNN_TENSOR_UINT8;
     case RKNN_TENSOR_INT16:
         return RKNNTensorType::RKNN_TENSOR_INT16;
+    case RKNN_TENSOR_INT32:
+        return RKNNTensorType::RKNN_TENSOR_INT32;
+    case RKNN_TENSOR_UINT32:
+        return RKNNTensorType::RKNN_TENSOR_UINT32;
+    case RKNN_TENSOR_INT64:
+        return RKNNTensorType::RKNN_TENSOR_INT64;
+    case RKNN_TENSOR_BOOL:
+        return RKNNTensorType::RKNN_TENSOR_BOOL;
     default:
-        return RKNNTensorType::RKNNTensorType_MAX;
+        return RKNNTensorType::RKNN_TENSOR_TYPE_MAX;
     }
 }
 
@@ -98,8 +106,29 @@ static RKNNTensorFormat to_rknn_hal(rknn_tensor_format fmt) {
             return RKNNTensorFormat::RKNN_TENSOR_NCHW;
         case RKNN_TENSOR_NHWC:
             return RKNNTensorFormat::RKNN_TENSOR_NHWC;
+        case RKNN_TENSOR_NC1HWC2:
+            return RKNNTensorFormat::RKNN_TENSOR_NC1HWC2;
         default:
-            return RKNNTensorFormat::RKNNTensorFormat_MAX;
+            return RKNNTensorFormat::RKNN_TENSOR_UNDEFINED;
+    }
+}
+
+static RKNNCoreMask to_rknn_hal(rknn_core_mask coremask) {
+    switch (coremask) {
+        case RKNN_NPU_CORE_AUTO:
+            return RKNNCoreMask::RKNN_NPU_CORE_AUTO;
+        case RKNN_NPU_CORE_0:
+            return RKNNCoreMask::RKNN_NPU_CORE_0;
+        case RKNN_NPU_CORE_1:
+            return RKNNCoreMask::RKNN_NPU_CORE_1;
+        case RKNN_NPU_CORE_2:
+            return RKNNCoreMask::RKNN_NPU_CORE_2;
+        case RKNN_NPU_CORE_0_1:
+            return RKNNCoreMask::RKNN_NPU_CORE_0_1;
+        case RKNN_NPU_CORE_0_1_2:
+            return RKNNCoreMask::RKNN_NPU_CORE_0_1_2;
+        default:
+            return RKNNCoreMask::RKNN_NPU_CORE_AUTO;
     }
 }
 
@@ -142,7 +171,15 @@ int RockchipNeuralnetworksBuilder::rknn_init(rknn_context* context, void *pData,
     CHECK();
     int ret_code = 0;
     g_debug_pro = property_get_bool("persist.vendor.rknndebug", false);
-    allocateAsh(size, [&](bool success, const hidl_memory& mem) {
+
+    // 判断是否传模型路径
+    uint32_t alloc_size = size;
+    if (size == 0) {
+        alloc_size = strlen((char *)pData);
+        ALOGD("allod_size=%d", alloc_size);
+    }
+
+    allocateAsh(alloc_size, [&](bool success, const hidl_memory& mem) {
         if (!success) {
             ALOGE("Allocate memory failed!");
         } else {
@@ -153,7 +190,7 @@ int RockchipNeuralnetworksBuilder::rknn_init(rknn_context* context, void *pData,
             };
             sp<IMemory> memory = mapMemory(mem);
             memory->update();
-            memcpy(memory->getPointer(), pData, size);
+            memcpy(memory->getPointer(), pData, alloc_size);
             memory->commit();
 
             Return<void> ret =  _kRKNNInterface->rknnInit(model, size, flag, [&](ErrorStatus status, RKNNContext rContext) {
@@ -269,9 +306,13 @@ int RockchipNeuralnetworksBuilder::rknn_inputs_set(rknn_context context, uint32_
 int RockchipNeuralnetworksBuilder::rknn_run(rknn_context context, rknn_run_extend* extend) {
     CHECK();
     _RKNNContext *_rknn_context = (_RKNNContext *)context;
-    const struct RKNNRunExtend rExt = {
-        .frame_id = extend?extend->frame_id:0,
-    };
+    struct RKNNRunExtend rExt = {0, 0, 0, 0};
+    if (extend != nullptr) {
+        rExt.frame_id = extend->frame_id;
+        rExt.non_block = extend->non_block;
+        rExt.timeout_ms = extend->timeout_ms;
+        rExt.fence_fd = extend->fence_fd;
+    }
     Return<ErrorStatus> ret = _kRKNNInterface->rknnRun(_rknn_context->context, rExt);
     if (ret.isOk()) {
         return 0;
@@ -502,6 +543,21 @@ int RockchipNeuralnetworksBuilder::rknn_set_io_mem(rknn_context context, rknn_te
         return 0;
     } else {
         ALOGE("rknn_set_io_mem error:%s", ret.description().c_str());
+        return -1;
+    }
+    return 0;
+}
+
+int RockchipNeuralnetworksBuilder::rknn_set_core_mask(rknn_context context, rknn_core_mask coremask) {
+    CHECK();
+    _RKNNContext *_rknn_context = (_RKNNContext *)context;
+    android::hardware::hidl_handle handle;
+
+    Return<ErrorStatus> ret = _kRKNNInterface->rknnSetCoreMask(_rknn_context->context, to_rknn_hal(coremask));
+    if (ret.isOk()) {
+        return 0;
+    } else {
+        ALOGE("rknn_set_core_mask error:%s", ret.description().c_str());
         return -1;
     }
     return 0;

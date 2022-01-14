@@ -32,6 +32,7 @@ typedef int (*ARKNN_outputs_release_fn)(ARKNNHAL *hal, rknn_context context, uin
 typedef int (*ARKNN_destory_mem_fn)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem);
 typedef rknn_tensor_mem * (*ARKNN_create_mem_fn)(ARKNNHAL *hal, rknn_context context, uint32_t size);
 typedef int (*ARKNN_set_io_mem_fn)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem, rknn_tensor_attr *attr);
+typedef int (*ARKNN_set_core_mask_fn)(ARKNNHAL *hal, rknn_context context, rknn_core_mask coremask);
 
 typedef int (*ASharedMemory_create_fn)(const char* name, size_t size);
 

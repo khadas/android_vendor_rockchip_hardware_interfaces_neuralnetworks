@@ -30,7 +30,7 @@ using ::android::sp;
 
 struct LoadModelCallback : public V1_0::ILoadModelCallback {
     // Methods from ::rockchip::hardware::neuralnetworks::V1_0::ILoadModelCallback follow.
-    Return<void> notify(::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus status, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNDeviceID& pdevs) override;
+    Return<void> notify(::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus status) override;
 
     // Methods from ::android::hidl::base::V1_0::IBase follow.
 
