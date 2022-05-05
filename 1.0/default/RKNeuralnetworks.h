@@ -34,13 +34,13 @@ using ::android::sp;
 struct RKNeuralnetworks : public V1_0::IRKNeuralnetworks {
     // Methods from ::rockchip::hardware::neuralnetworks::V1_0::IRKNeuralnetworks follow.
     Return<void> rknnInit(const ::rockchip::hardware::neuralnetworks::V1_0::RKNNModel& model, uint32_t size, uint32_t flag, rknnInit_cb _hidl_cb) override;
-    Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnDestory(uint64_t context) override;
+    Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnDestroy(uint64_t context) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnQuery(uint64_t context, ::rockchip::hardware::neuralnetworks::V1_0::RKNNQueryCmd cmd, const hidl_memory& info, uint32_t size) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnInputsSet(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::Request& request) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnRun(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNRunExtend& extend) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnOutputsGet(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::Response& response, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNOutputExtend& extend) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnOutputsRelease(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::Response& response) override;
-    Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnDestoryMemory(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorMemory& mem) override;
+    Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnDestroyMemory(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorMemory& mem) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnSetIOMem(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorMemory& mem, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorAttr& attr) override;
     Return<void> rknnCreateMem(uint64_t context, uint32_t size, rknnCreateMem_cb _hidl_cb) override;
     Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> rknnSetCoreMask(uint64_t context, ::rockchip::hardware::neuralnetworks::V1_0::RKNNCoreMask coremask) override;

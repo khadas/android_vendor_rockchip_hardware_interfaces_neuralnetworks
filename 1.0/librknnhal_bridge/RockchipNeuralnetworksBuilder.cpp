@@ -217,8 +217,8 @@ int RockchipNeuralnetworksBuilder::rknn_destroy(rknn_context context) {
     CHECK();
     _RKNNContext *_rknn_context = (_RKNNContext *)context;
     if (_rknn_context != nullptr) {
-        // ALOGD("rknnDestory ctx=0x%x", _rknn_context->context);
-        _kRKNNInterface->rknnDestory(_rknn_context->context);
+        // ALOGD("rknnDestroy ctx=0x%x", _rknn_context->context);
+        _kRKNNInterface->rknnDestroy(_rknn_context->context);
         _rknn_context->context = 0;
         if (_rknn_context->input_tensor_attrs != nullptr) {
             free(_rknn_context->input_tensor_attrs);
@@ -401,7 +401,7 @@ int RockchipNeuralnetworksBuilder::rknn_outputs_release(rknn_context context, ui
     return 0;
 }
 
-int RockchipNeuralnetworksBuilder::rknn_destory_mem(rknn_context context, rknn_tensor_mem *mem) {
+int RockchipNeuralnetworksBuilder::rknn_destroy_mem(rknn_context context, rknn_tensor_mem *mem) {
     CHECK();
     _RKNNContext *_rknn_context = (_RKNNContext *)context;
     RKNNTensorMemory bridge_mem;
@@ -419,20 +419,20 @@ int RockchipNeuralnetworksBuilder::rknn_destory_mem(rknn_context context, rknn_t
         if (mem == (rknn_tensor_mem *)iter->second) {
             bridge_mem.bridge_uuid = iter->first;
             // #ifdef __arm__
-            // printf("rknn_destory_mem:uuid=0x%llx, mem=%p\n", bridge_mem.bridge_uuid, mem);
+            // printf("rknn_destroy_mem:uuid=0x%llx, mem=%p\n", bridge_mem.bridge_uuid, mem);
             // #else
-            // printf("rknn_destory_mem:uuid=0x%lx, mem=%p\n", bridge_mem.bridge_uuid, mem);
+            // printf("rknn_destroy_mem:uuid=0x%lx, mem=%p\n", bridge_mem.bridge_uuid, mem);
             // #endif
             break;
         }
     }
 
     if (bridge_mem.bridge_uuid != 0) {      
-        Return<ErrorStatus> ret = _kRKNNInterface->rknnDestoryMemory(_rknn_context->context, bridge_mem);
+        Return<ErrorStatus> ret = _kRKNNInterface->rknnDestroyMemory(_rknn_context->context, bridge_mem);
         if (ret.isOk()) {
             return 0;
         } else {
-            ALOGE("rknn_destory_mem error!");
+            ALOGE("rknn_destroy_mem error!");
             return -1;
         }
     }

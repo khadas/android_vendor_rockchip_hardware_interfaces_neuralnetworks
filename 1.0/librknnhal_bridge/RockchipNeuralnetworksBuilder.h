@@ -58,7 +58,7 @@ class RockchipNeuralnetworksBuilder {
     int rknn_run(rknn_context context, rknn_run_extend* extend);
     int rknn_outputs_get(rknn_context, uint32_t n_outputs, rknn_output outputs[], rknn_output_extend* extend);
     int rknn_outputs_release(rknn_context context, uint32_t n_ouputs, rknn_output outputs[]);
-    int rknn_destory_mem(rknn_context ctx, rknn_tensor_mem *mem);
+    int rknn_destroy_mem(rknn_context ctx, rknn_tensor_mem *mem);
     rknn_tensor_mem* rknn_create_mem(rknn_context ctx, uint32_t size);
     int rknn_set_io_mem(rknn_context ctx, rknn_tensor_mem *mem, rknn_tensor_attr *attr);
     int rknn_set_core_mask(rknn_context ctx, rknn_core_mask coremask);

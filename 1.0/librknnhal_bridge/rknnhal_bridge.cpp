@@ -107,9 +107,9 @@ int ARKNN_outputs_release(ARKNNHAL *hal, rknn_context context, uint32_t n_output
     return ret;
 }
 
-int ARKNN_destory_mem(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem) {
+int ARKNN_destroy_mem(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem) {
     CHECK_AND_GET_CLIENT();
-    int ret = client->rknn_destory_mem(context, mem);
+    int ret = client->rknn_destroy_mem(context, mem);
     return ret;
 }
 

@@ -29,7 +29,7 @@ typedef int (*ARKNN_inputs_set_fn)(ARKNNHAL *hal, rknn_context context, uint32_t
 typedef int (*ARKNN_run_fn)(ARKNNHAL *hal, rknn_context context, rknn_run_extend* extend);
 typedef int (*ARKNN_outputs_get_fn)(ARKNNHAL *hal, rknn_context, uint32_t n_outputs, rknn_output outputs[], rknn_output_extend* extend);
 typedef int (*ARKNN_outputs_release_fn)(ARKNNHAL *hal, rknn_context context, uint32_t n_ouputs, rknn_output outputs[]);
-typedef int (*ARKNN_destory_mem_fn)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem);
+typedef int (*ARKNN_destroy_mem_fn)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem);
 typedef rknn_tensor_mem * (*ARKNN_create_mem_fn)(ARKNNHAL *hal, rknn_context context, uint32_t size);
 typedef int (*ARKNN_set_io_mem_fn)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem, rknn_tensor_attr *attr);
 typedef int (*ARKNN_set_core_mask_fn)(ARKNNHAL *hal, rknn_context context, rknn_core_mask coremask);

@@ -158,7 +158,7 @@ Return<void> RKNeuralnetworks::rknnInit(const ::rockchip::hardware::neuralnetwor
     return Void();
 }
 
-Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> RKNeuralnetworks::rknnDestory(uint64_t context) {
+Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> RKNeuralnetworks::rknnDestroy(uint64_t context) {
     RECORD_TAG();
 #if IMPL_RKNN
     //CheckContext();
@@ -345,7 +345,7 @@ Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> RKNeuralnetworks
     return ::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus {toErrorStatus(ret)};
 }
 
-Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> RKNeuralnetworks::rknnDestoryMemory(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorMemory& bridge_mem) {
+Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> RKNeuralnetworks::rknnDestroyMemory(uint64_t context, const ::rockchip::hardware::neuralnetworks::V1_0::RKNNTensorMemory& bridge_mem) {
     rknn_tensor_mem * mem = nullptr;
 
     std::map<uint64_t, void *>::iterator iter;  
@@ -358,17 +358,17 @@ Return<::rockchip::hardware::neuralnetworks::V1_0::ErrorStatus> RKNeuralnetworks
     }
 
     // #ifdef __arm__
-    //     ALOGE("rknnDestoryMemory: bridge_mem.bridge_uuid:0x%llx", bridge_mem.bridge_uuid);
+    //     ALOGE("rknnDestroyMemory: bridge_mem.bridge_uuid:0x%llx", bridge_mem.bridge_uuid);
     // #else
-    //     ALOGE("rknnDestoryMemory: bridge_mem.bridge_uuid:0x%lx", bridge_mem.bridge_uuid);
+    //     ALOGE("rknnDestroyMemory: bridge_mem.bridge_uuid:0x%lx", bridge_mem.bridge_uuid);
     // #endif
 
     if (mem != nullptr) {
         if (mem->flags & RKNN_TENSOR_MEMORY_FLAGS_ALLOC_INSIDE) {
-            rknn_destory_mem(context, mem);            
+            rknn_destroy_mem(context, mem);            
             mem = nullptr;
         } else {
-            rknn_destory_mem(context, mem);
+            rknn_destroy_mem(context, mem);
             if (mem->fd >= 0) {
                 close(mem->fd);
             }

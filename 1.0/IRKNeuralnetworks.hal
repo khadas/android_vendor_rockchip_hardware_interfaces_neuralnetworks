@@ -10,7 +10,7 @@ interface IRKNeuralnetworks {
     rknnInit(RKNNModel model, uint32_t size, uint32_t flag) generates (ErrorStatus status, RKNNContext context);
 
     @callflow(next={"*"})
-    rknnDestory(RKNNContext context) generates (ErrorStatus status);
+    rknnDestroy(RKNNContext context) generates (ErrorStatus status);
     @callflow(next={"*"})
     rknnQuery(RKNNContext context, RKNNQueryCmd cmd, memory info, uint32_t size) generates (ErrorStatus status);
     @callflow(next={"*"})
@@ -22,7 +22,7 @@ interface IRKNeuralnetworks {
     @callflow(next={"*"})
     rknnOutputsRelease(RKNNContext context, Response response) generates (ErrorStatus status);
     @callflow(next={"*"})
-    rknnDestoryMemory(RKNNContext context, RKNNTensorMemory mem) generates (ErrorStatus status);
+    rknnDestroyMemory(RKNNContext context, RKNNTensorMemory mem) generates (ErrorStatus status);
     @callflow(next={"*"})
     rknnSetIOMem(RKNNContext context, RKNNTensorMemory mem, RKNNTensorAttr attr) generates (ErrorStatus status);
     @callflow(next={"*"})

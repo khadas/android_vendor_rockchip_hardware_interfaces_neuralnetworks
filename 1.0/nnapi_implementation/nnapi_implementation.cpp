@@ -45,7 +45,7 @@ struct NnApi {
   int (*ARKNN_run)(ARKNNHAL *hal, rknn_context context, rknn_run_extend* extend);
   int (*ARKNN_outputs_get)(ARKNNHAL *hal, rknn_context, uint32_t n_outputs, rknn_output outputs[], rknn_output_extend* extend);
   int (*ARKNN_outputs_release)(ARKNNHAL *hal, rknn_context context, uint32_t n_ouputs, rknn_output outputs[]);
-  int (*ARKNN_destory_mem)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem);
+  int (*ARKNN_destroy_mem)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem);
   rknn_tensor_mem * (*ARKNN_create_mem)(ARKNNHAL *hal, rknn_context context, uint32_t size);
   int (*ARKNN_set_io_mem)(ARKNNHAL *hal, rknn_context context, rknn_tensor_mem *mem, rknn_tensor_attr *attr);
   int (*ARKNN_set_core_mask)(ARKNNHAL *hal, rknn_context context, rknn_core_mask coremask);
@@ -138,7 +138,7 @@ static const NnApi LoadNnApi() {
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_run);
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_outputs_get);
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_outputs_release);
-  LOAD_FUNCTION(librknnhal_bridge, ARKNN_destory_mem);
+  LOAD_FUNCTION(librknnhal_bridge, ARKNN_destroy_mem);
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_create_mem);
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_set_io_mem);
   LOAD_FUNCTION(librknnhal_bridge, ARKNN_set_core_mask);
@@ -329,7 +329,7 @@ rknn_tensor_mem* rknn_create_mem(rknn_context context, uint32_t size) {
   return mem;
 }
 
-int rknn_destory_mem(rknn_context context, rknn_tensor_mem *mem) {
+int rknn_destroy_mem(rknn_context context, rknn_tensor_mem *mem) {
   _rknn_context *_ctx = (_rknn_context *)context;
   if (_ctx == NULL || _ctx->hal == NULL || _ctx->rknn_ctx == 0 || (mem == NULL)) {
     return RKNN_ERR_CTX_INVALID;
@@ -337,7 +337,7 @@ int rknn_destory_mem(rknn_context context, rknn_tensor_mem *mem) {
 
   const NnApi *_nnapi = NnApiImplementation();
 
-  _nnapi->ARKNN_destory_mem(_ctx->hal, _ctx->rknn_ctx, mem);
+  _nnapi->ARKNN_destroy_mem(_ctx->hal, _ctx->rknn_ctx, mem);
 
   free(mem);
 
