@@ -12,4 +12,5 @@ cc_library_shared {
         "hardware/rockchip/rknpu2/runtime/RK3588/Android/librknn_api/include/",
     ],
     stl: "c++_static",
+    vendor_available: true,
 }

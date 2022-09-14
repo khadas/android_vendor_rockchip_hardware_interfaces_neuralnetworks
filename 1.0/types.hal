@@ -125,6 +125,9 @@ struct RKNNTensorAttr {
                                                            if FALSE, the buf data is converted into an input consistent with the model
                                                                      according to the following type and fmt. so the following variables
                                                                      need to be set.*/
+    uint32_t h_stride;                                  /* the stride along the height dimention of input,
+                                                           Note: it is write-only, if it was set to 0, h_stride = height. */
+
 };
 
 /*

@@ -1,6 +1,7 @@
 cc_library_shared {
     name: "librknnhal_bridge.rockchip",
     srcs: ["**/*.cpp"],
+    vendor_available: true,
 //    vendor: true,
     shared_libs: [
         "rockchip.hardware.neuralnetworks@1.0",
